@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains name_game_client.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function name_game_client_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the name_game_client module.
+    case 'help.page.name_game_client':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('A Client to serve Name Games via the Name Game API') . '</p>';
+      return $output;
+
+    default:
+  }
+}

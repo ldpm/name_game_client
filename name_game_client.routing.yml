@@ -1,0 +1,15 @@
+
+name_game_client.welcome_controller_welcome:
+  path: '/welcome'
+  defaults:
+    _controller: '\Drupal\name_game_client\Controller\WelcomeController::welcome'
+    _title: 'Welcome Controller'
+  requirements:
+    _permission: 'access content'
+name_game_client.create_hat:
+  path: '/create_hat'
+  defaults:
+    _form: '\Drupal\name_game_client\Form\CreateHat'
+    _title: 'CreateHat'
+  requirements:
+    _permission: 'play name game'

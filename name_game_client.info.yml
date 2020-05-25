@@ -1,0 +1,6 @@
+name: 'Name Game Client'
+type: module
+description: 'A Client to serve Name Games via the Name Game API'
+core: 8.x
+package: 'Custom'
+

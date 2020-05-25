@@ -1,0 +1,4 @@
+play name game:
+  title: 'Play Name Game'
+  description: 'Allows people to access Name Game nodes'
+  restrict access: TRUE
