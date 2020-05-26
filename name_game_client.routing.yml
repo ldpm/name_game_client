@@ -3,7 +3,7 @@ name_game_client.welcome_controller_welcome:
   path: '/welcome'
   defaults:
     _controller: '\Drupal\name_game_client\Controller\WelcomeController::welcome'
-    _title: 'Welcome Controller'
+    _title: 'The Waiting Room'
   requirements:
     _permission: 'access content'
 name_game_client.create_hat:
@@ -26,7 +26,7 @@ name_game_client.hat_controller_play:
   path: '/hat/{hatid}/play'
   defaults:
     _controller: '\Drupal\name_game_client\Controller\HatController::play'
-    _title: 'play'
+    _title: 'Clue this name!'
   requirements:
     _permission: 'play name game'
 

@@ -22,3 +22,15 @@ function name_game_client_help($route_name, RouteMatchInterface $route_match) {
     default:
   }
 }
+
+function name_game_client_theme($existing, $type, $theme, $path) {
+  return array(
+    'waiting_room' => array(
+      'variables' => array(
+        'hat_id' => NULL,
+        'player' => array(),
+        'names' => NULL,
+      ),
+    ),
+  );
+}

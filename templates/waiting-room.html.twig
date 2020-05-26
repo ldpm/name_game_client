@@ -1,0 +1,35 @@
+<h2>How to Play</h2>
+<ol>
+  <li>ONE person should <a href="/create_hat" target="_blank">Create a Hat</a> (start a new game). That person will be given a "Hat ID".</li>
+  <li>Then EACH player should:</li>
+  <ol>
+    <li><a href="/hat/form/join" target="_blank">Join that Hat</a>, entering the Hat ID from above.</li>
+    <li><a href="/player/form/player" target="_blank">Set your Player Name</a> for this game. At the end of the game, you'll be able to see who submitted which names [coming soon].</li>
+    {% if hat_id is empty %}
+    <li>Enter names into the hat. (link will appear once you join a hat)</li>
+    {% else %}
+    <li><a href="/hat/{{ hat_id }}/addnames" target="_blank">Enter names</a> into the hat.</li>
+    {% endif %}
+    <li>Come back here and wait for your turn!</li>
+  </ol>
+  <li>On your turn, click the "Pull a Name" button below to see your first name. There will be two buttons below the name; one if you get the name right, the other if you run out of time or accidentally say a name.</li>
+  <li>Finally wait right here until your next turn!</li>
+  </ol>
+</ol>
+
+<div class="demo-block">
+  {%  if player.id is empty %}
+  <p class="error">You have not yet set your Player Name.</p>
+  {% else %}
+  <P>Your Player name is {{ player.Name }}.</P>
+  {% endif %}
+  {% if hat_id is empty %}
+  <p class="error">You have not yet joined a Hat.</p>
+  {% else %}
+  <p>You have joined Hat #{{ hat_id }}.</p>
+  {% endif %}
+
+  {% if player.id is not empty and hat_id is not empty %}
+  <a href="/hat/{{ hat_id }}/play" class="button">It's my turn! Pull a name!</a>
+  {% endif %}
+</div>
