@@ -3,6 +3,7 @@
 namespace Drupal\name_game_client\Controller;
 
 use Drupal\Core\Ajax\AlertCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\RemoveCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Controller\ControllerBase;
@@ -23,11 +24,33 @@ class HatController extends ControllerBase {
    */
   public function getNext() {
 
+    $hat_id = $_REQUEST['hatid'];
+    $name_id = $_REQUEST['nameid'];
+
+    // Sadly, re-fetch the name because I suck.
+    $client = \Drupal::httpClient();
+    $name = $client->get('http://35.226.37.213/namegame/api/names/' . $name_id);
+    if ($name->getStatusCode() == 200) {
+      $n_response = json_decode($name->getBody());
+
+      // Time to mark this name as completed!
+      $update = $client->put('http://35.226.37.213/namegame/api/names/' . $name_id, [
+        'json' => [
+          'Name' => $n_response->{'Name'},
+          'isGotten' => true,
+          'createdDate' => $n_response->{'createdDate'},
+          'owner' => $n_response->{'owner'},
+          'hat' => $n_response->{'hat'}
+        ]
+      ]);
+    }
+    else {
+      throw new \Exception("Couldn't find that name on the server");
+    }
+
     $response = new AjaxResponse();
-    $alert = new AlertCommand("Hello, world!");
-    //$replace = new ReplaceCommand('#current_name',"Hello, world!");
-    $response->addCommand($alert);
-    //$response->addCommand($replace);
+    $redirect = new RedirectCommand("/hat/$hat_id/play");
+    $response->addCommand($redirect);
     return $response;
   }
 
@@ -46,30 +69,41 @@ class HatController extends ControllerBase {
       if ($hatid != $stored_hat) {
         throw new \Exception("You are signed into a different hat");
       }
+
       // First fetch all the ungotten names from the current hat
       $client = \Drupal::httpClient();
       $request = $client->get('http://35.226.37.213/namegame/api/hats/' . $hatid . '/names?isGotten=false', ['headers' => array('Content-Type' => 'application/json', 'Accept' => 'application/json')]);
       if ($request->getStatusCode() == 200) {
         $response = json_decode($request->getBody());
         $thisname = array_rand($response);
-        $markup = "<div id='current_name'>" . $response[$thisname]->{'Name'} . "</div>";
-        $url = Url::fromRoute('name_game_client.hat_controller_get_next');
-        $url->setOption('attributes', ['class' => 'use-ajax']);
+        $markup = "<div id='current_name'><h2>" . $response[$thisname]->{'Name'} . "</h2></div>";
+        $arguments = array(
+          'hatid' => $hatid,
+          'nameid' => $response[$thisname]->{'id'},
+        );
+        $url = Url::fromRoute('name_game_client.hat_controller_get_next', $arguments);
+        $url->setOption('attributes', ['class' => array('use-ajax','button')]);
+        $back = Url::fromRoute('name_game_client.welcome_controller_welcome');
+        $back->setOption('attributes', ['class' => 'button']);
 
       }
       else {
         throw new \Exception("We got an unexpected response: " . $request->getReasonPhrase());
       }
       $return[] = array(
-        '#type' => 'link',
-        '#url' => $url,
-        '#title' => $this->t("Get Next Name"),
-      );
-      $return[] = array(
         '#type' => 'markup',
         '#markup' => $markup,
       );
-
+      $return[] = array(
+        '#type' => 'link',
+        '#url' => $url,
+        '#title' => $this->t("Got it! Draw another name"),
+      );
+      $return[] = array(
+        '#type' => 'link',
+        '#url' => $back,
+        '#title' => $this->t("We didn't get it; return to the waiting room"),
+      );
       return $return;
     }
     catch (\Exception $e) {
