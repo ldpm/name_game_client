@@ -17,7 +17,7 @@
   </ol>
 </ol>
 
-<div class="demo-block">
+<div class="bs-callout">
   {%  if player.id is empty %}
   <p class="error">You have not yet set your Player Name.</p>
   {% else %}
@@ -30,6 +30,6 @@
   {% endif %}
 
   {% if player.id is not empty and hat_id is not empty %}
-  <a href="/hat/{{ hat_id }}/play" class="button">It's my turn! Pull a name!</a>
+  <a href="/hat/{{ hat_id }}/play" class="btn">It's my turn! Pull a name!</a>
   {% endif %}
 </div>

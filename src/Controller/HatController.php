@@ -82,9 +82,9 @@ class HatController extends ControllerBase {
           'nameid' => $response[$thisname]->{'id'},
         );
         $url = Url::fromRoute('name_game_client.hat_controller_get_next', $arguments);
-        $url->setOption('attributes', ['class' => array('use-ajax','button')]);
+        $url->setOption('attributes', ['class' => array('use-ajax','btn', 'btn-primary')]);
         $back = Url::fromRoute('name_game_client.welcome_controller_welcome');
-        $back->setOption('attributes', ['class' => 'button']);
+        $back->setOption('attributes', ['class' => array('btn-nevermind', 'btn')]);
 
       }
       else {
@@ -97,6 +97,8 @@ class HatController extends ControllerBase {
       $return[] = array(
         '#type' => 'link',
         '#url' => $url,
+        '#prefix' => "<P>",
+        '#suffix' => "</P>",
         '#title' => $this->t("Got it! Draw another name"),
       );
       $return[] = array(
