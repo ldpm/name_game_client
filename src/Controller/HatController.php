@@ -2,14 +2,34 @@
 
 namespace Drupal\name_game_client\Controller;
 
+use Drupal\Core\Ajax\AlertCommand;
+use Drupal\Core\Ajax\RemoveCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Ajax\AjaxResponse;
+use Robo\Task\Composer\Remove;
+use Drupal\Core\Url;
+
 
 /**
  * Class HatController.
  */
 class HatController extends ControllerBase {
+
+  /**
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   */
+  public function getNext() {
+
+    $response = new AjaxResponse();
+    $alert = new AlertCommand("Hello, world!");
+    //$replace = new ReplaceCommand('#current_name',"Hello, world!");
+    $response->addCommand($alert);
+    //$response->addCommand($replace);
+    return $response;
+  }
 
   /**
    * Play.
@@ -32,16 +52,25 @@ class HatController extends ControllerBase {
       if ($request->getStatusCode() == 200) {
         $response = json_decode($request->getBody());
         $thisname = array_rand($response);
-        $markup = $response[$thisname]->{'Name'};
+        $markup = "<div id='current_name'>" . $response[$thisname]->{'Name'} . "</div>";
+        $url = Url::fromRoute('name_game_client.hat_controller_get_next');
+        $url->setOption('attributes', ['class' => 'use-ajax']);
+
       }
       else {
         throw new \Exception("We got an unexpected response: " . $request->getReasonPhrase());
       }
-
-      return [
+      $return[] = array(
+        '#type' => 'link',
+        '#url' => $url,
+        '#title' => $this->t("Get Next Name"),
+      );
+      $return[] = array(
         '#type' => 'markup',
         '#markup' => $markup,
-      ];
+      );
+
+      return $return;
     }
     catch (\Exception $e) {
       \Drupal::messenger()->addMessage($e->getMessage(), MessengerInterface::TYPE_ERROR);

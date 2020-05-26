@@ -14,6 +14,14 @@ name_game_client.create_hat:
   requirements:
     _permission: 'play name game'
 
+name_game_client.hat_controller_get_next:
+  path: '/hat/getNext'
+  defaults:
+    _title: 'Ajax Link'
+    _controller: '\Drupal\name_game_client\Controller\HatController::getNext'
+  requirements:
+    _permission: 'access content'
+
 name_game_client.hat_controller_play:
   path: '/hat/{hatid}/play'
   defaults:
