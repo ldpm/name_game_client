@@ -13,3 +13,41 @@ name_game_client.create_hat:
     _title: 'CreateHat'
   requirements:
     _permission: 'play name game'
+
+name_game_client.hat_controller_play:
+  path: '/hat/{hatid}/play'
+  defaults:
+    _controller: '\Drupal\name_game_client\Controller\HatController::play'
+    _title: 'play'
+  requirements:
+    _permission: 'play name game'
+
+name_game_client.hat_controller_addnames:
+  path: '/hat/{hatid}/addnames'
+  defaults:
+    _controller: '\Drupal\name_game_client\Controller\HatController::addnames'
+    _title: 'Add Names to a Hat'
+  requirements:
+    _permission: 'play name game'
+
+name_game_client.player_form:
+  path: '/player/form/player'
+  defaults:
+    _form: '\Drupal\name_game_client\Form\PlayerForm'
+    _title: 'PlayerForm'
+  requirements:
+    _permission: 'play name game'
+name_game_client.hat_form:
+  path: '/hat/form/join'
+  defaults:
+    _form: '\Drupal\name_game_client\Form\HatForm'
+    _title: 'HatForm'
+  requirements:
+    _access: 'TRUE'
+name_game_client.name_form:
+  path: '/name/form/name'
+  defaults:
+    _form: '\Drupal\name_game_client\Form\NameForm'
+    _title: 'NameForm'
+  requirements:
+    _access: 'TRUE'

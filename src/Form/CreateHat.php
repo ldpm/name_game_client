@@ -53,13 +53,9 @@ class CreateHat extends FormBase {
         'createdDate' => $todaystring
       ]
     ]);
-    sleep(0);
     $response = json_decode($request->getBody());
 
-
-    foreach ($form_state->getValues() as $key => $value) {
-      \Drupal::messenger()->addMessage($key . ': ' . ($key === 'text_format'?$value['value']:$value));
-    }
+    \Drupal::messenger()->addMessage("You have created Hat #" . $response->{'id'});
   }
 
 }
