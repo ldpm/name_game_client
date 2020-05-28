@@ -68,6 +68,7 @@ class PlayerForm extends FormBase {
       $tempstore->set('name_game_player_id', $response->{'id'});
 
       \Drupal::messenger()->addMessage("Your Player ID for this game is " . $response->{'id'}.". You shouldn't need to remember it.");
+      $form_state->setRedirect('name_game_client.welcome_controller_welcome');
     }
     catch (RequestException $e) {
       watchdog_exception('name_game_client', $e->getMessage());

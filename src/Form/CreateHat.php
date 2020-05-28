@@ -4,6 +4,7 @@ namespace Drupal\name_game_client\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class CreateHat.
@@ -56,6 +57,7 @@ class CreateHat extends FormBase {
     $response = json_decode($request->getBody());
 
     \Drupal::messenger()->addMessage("You have created Hat #" . $response->{'id'});
+    $form_state->setRedirect('name_game_client.welcome_controller_welcome');
   }
 
 }

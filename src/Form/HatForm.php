@@ -4,6 +4,7 @@ namespace Drupal\name_game_client\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class HatForm.
@@ -56,5 +57,6 @@ class HatForm extends FormBase {
       ->get('name_game_client');
     $tempstore->set('name_game_hat_id', $form_state->getValue('hat_id'));
     \Drupal::messenger()->addMessage("You have successfully joined Hat #" . $form_state->getValue('hat_id'));
+    $form_state->setRedirect('name_game_client.welcome_controller_welcome');
   }
 }
