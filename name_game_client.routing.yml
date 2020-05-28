@@ -6,6 +6,8 @@ name_game_client.welcome_controller_welcome:
     _title: 'The Waiting Room'
   requirements:
     _permission: 'access content'
+  options:
+    no_cache: TRUE
 name_game_client.create_hat:
   path: '/create_hat'
   defaults:
@@ -29,6 +31,8 @@ name_game_client.hat_controller_play:
     _title: 'Clue this name!'
   requirements:
     _permission: 'play name game'
+  options:
+    no_cache: TRUE
 
 name_game_client.hat_controller_addnames:
   path: '/hat/{hatid}/addnames'
