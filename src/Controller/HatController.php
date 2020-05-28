@@ -75,16 +75,32 @@ class HatController extends ControllerBase {
       $request = $client->get('http://35.226.37.213/namegame/api/hats/' . $hatid . '/names?isGotten=false', ['headers' => array('Content-Type' => 'application/json', 'Accept' => 'application/json')]);
       if ($request->getStatusCode() == 200) {
         $response = json_decode($request->getBody());
-        $thisname = array_rand($response);
-        $markup = "<div id='current_name'><h2>" . $response[$thisname]->{'Name'} . "</h2></div>";
-        $arguments = array(
-          'hatid' => $hatid,
-          'nameid' => $response[$thisname]->{'id'},
-        );
-        $url = Url::fromRoute('name_game_client.hat_controller_get_next', $arguments);
-        $url->setOption('attributes', ['class' => array('use-ajax','btn', 'btn-primary')]);
-        $back = Url::fromRoute('name_game_client.welcome_controller_welcome');
-        $back->setOption('attributes', ['class' => array('btn-nevermind', 'btn')]);
+        if (empty($response)) {
+          $markup = "<div id='current_name'><h2>Finished! The hat is empty!</h2>";
+          $back = Url::fromRoute('name_game_client.welcome_controller_welcome');
+          $back->setOption('attributes', ['class' => array('btn-primary', 'btn')]);
+          $backtext = $this->t("Return to the waiting room");
+          $url = false;
+        }
+        else {
+          $thisname = array_rand($response);
+          $markup = "<div id='current_name'><h2>" . $response[$thisname]->{'Name'} . "</h2></div>";
+          $arguments = array(
+            'hatid' => $hatid,
+            'nameid' => $response[$thisname]->{'id'},
+          );
+          $url = Url::fromRoute('name_game_client.hat_controller_get_next', $arguments);
+          $url->setOption('attributes', [
+            'class' => array(
+              'use-ajax',
+              'btn',
+              'btn-primary'
+            )
+          ]);
+          $back = Url::fromRoute('name_game_client.welcome_controller_welcome');
+          $back->setOption('attributes', ['class' => array('btn-nevermind', 'btn')]);
+          $backtext = $this->t("We didn't get it; return to the waiting room");
+        }
 
       }
       else {
@@ -94,17 +110,19 @@ class HatController extends ControllerBase {
         '#type' => 'markup',
         '#markup' => $markup,
       );
-      $return[] = array(
-        '#type' => 'link',
-        '#url' => $url,
-        '#prefix' => "<P>",
-        '#suffix' => "</P>",
-        '#title' => $this->t("Got it! Draw another name"),
-      );
+      if ($url) {
+        $return[] = array(
+          '#type' => 'link',
+          '#url' => $url,
+          '#prefix' => "<P>",
+          '#suffix' => "</P>",
+          '#title' => $this->t("Got it! Draw another name"),
+        );
+      }
       $return[] = array(
         '#type' => 'link',
         '#url' => $back,
-        '#title' => $this->t("We didn't get it; return to the waiting room"),
+        '#title' => $backtext,
       );
       return $return;
     }
