@@ -19,6 +19,15 @@ use Drupal\Core\Url;
  */
 class HatController extends ControllerBase {
 
+  public function leaveHat() {
+    $tempstore = \Drupal::service('user.private_tempstore')->get('name_game_client');
+    $tempstore->delete('name_game_hat_id');
+    $response = new AjaxResponse();
+    $redirect = new RedirectCommand("/welcome");
+    $response->addCommand($redirect);
+    return $response;
+  }
+
   /**
    * @return \Drupal\Core\Ajax\AjaxResponse
    */

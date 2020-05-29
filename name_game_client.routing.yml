@@ -16,6 +16,14 @@ name_game_client.create_hat:
   requirements:
     _permission: 'play name game'
 
+name_game_client.hat_controller_leave_hat:
+  path: '/hat/leaveHat'
+  defaults:
+    _title: 'Ajax Link to leave a hat'
+    _controller: '\Drupal\name_game_client\Controller\HatController::leaveHat'
+  requirements:
+    _permission: 'access content'
+
 name_game_client.hat_controller_get_next:
   path: '/hat/getNext'
   defaults:

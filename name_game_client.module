@@ -32,5 +32,12 @@ function name_game_client_theme($existing, $type, $theme, $path) {
         'names' => NULL,
       ),
     ),
+    'player_list_block' => array(
+      'variables' => array(
+        'hat_id' => NULL,
+        'players' => array(),
+        'names_remaining' => NULL,
+      ),
+    ),
   );
 }

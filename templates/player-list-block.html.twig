@@ -1,0 +1,42 @@
+{#
+/**
+* @file
+* Default theme implementation to display a block.
+*
+* @see template_preprocess_block()
+*
+* @ingroup themeable
+*/
+#}
+{% set classes = [
+    'clear-both',
+] %}
+{% if hat_id is not empty %}
+<h2 class="text-success">You are in a game</h2>
+
+  <p>(Reload page to update)</p>
+<div>
+  Hat ID: {{ hat_id }}
+  {% if names_remaining is empty %}
+    <p>Hat is empty</p>
+  {% else %}
+    <p>Names Remaining in Hat: {{ names_remaining }}</p>
+  {% endif %}
+</div>
+<div id="player_list">
+  <h2 class="text-primary">Players with names in this hat:</h2>
+  {%  for player in players %}
+  <li>{{ player }}</li>
+  {% endfor %}
+
+</div>
+  <div>
+    <p>If the game's over, you can leave the game. You can also join a new hat right away without leaving.</p>
+  <a href="/hat/leaveHat" class="use-ajax btn btn-danger">Leave Game</a>
+  </div>
+
+
+{% else %}
+<h2 class="text-danger">You are not currently in a game</h2>
+
+{% endif %}
