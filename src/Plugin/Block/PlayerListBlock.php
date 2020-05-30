@@ -77,7 +77,7 @@ class PlayerListBlock extends BlockBase implements ContainerFactoryPluginInterfa
         }
       }
     }
-
+    $players = array_unique($players);
     $build['#theme'] = 'player_list_block';
     $build['#hat_id'] = $stored_hat;
     $build['#players'] = $players;
