@@ -56,8 +56,9 @@ class PlayerForm extends FormBase {
     $today = new \DateTime();
     $todaystring = $today->format(DATE_ISO8601);
     $client = \Drupal::httpClient();
+    $api_url = $this->config->get('name_game_client_api_server');
     try {
-      $request = $client->post("http://35.226.37.213/namegame/api/players", [
+      $request = $client->post($api_url . "/api/players", [
         'json' => [
           'createdDate' => $todaystring,
           'Name' => $form_state->getValue('your_name')

@@ -39,12 +39,13 @@ class PlayerListBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $build = [];
     $tempstore = $this->userPrivateTempstore->get('name_game_client');
     $stored_hat = $tempstore->get('name_game_hat_id');
+    $api_url = $this->config->get('name_game_client_api_server');
     if ($stored_hat > 0) {
       $players = array();
       $names_remaining = "0";
       // First fetch all the ungotten names from the current hat
       $client = \Drupal::httpClient();
-      $remaining = $client->get('http://35.226.37.213/namegame/api/hats/' . $stored_hat . '/names?isGotten=false', [
+      $remaining = $client->get($api_url . '/hats/' . $stored_hat . '/names?isGotten=false', [
         'headers' => array(
           'Content-Type' => 'application/json',
           'Accept' => 'application/json'
@@ -54,7 +55,7 @@ class PlayerListBlock extends BlockBase implements ContainerFactoryPluginInterfa
         $remaining_names = json_decode($remaining->getBody());
         $names_remaining = sizeof($remaining_names);
       }
-      $all = $client->get('http://35.226.37.213/namegame/api/hats/' . $stored_hat . '/names', [
+      $all = $client->get($api_url . '/hats/' . $stored_hat . '/names', [
         'headers' => array(
           'Content-Type' => 'application/json',
           'Accept' => 'application/json'
@@ -64,7 +65,7 @@ class PlayerListBlock extends BlockBase implements ContainerFactoryPluginInterfa
         $all_names = json_decode($all->getBody());
         foreach ($all_names as $name) {
           $owner_id = $name->{'owner'};
-          $player_resp = $client->get('http://35.226.37.213' . $owner_id, [
+          $player_resp = $client->get('http://35.225.188.135' . $owner_id, [
             'headers' => array(
               'Content-Type' => 'application/json',
               'Accept' => 'application/json'

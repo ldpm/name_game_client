@@ -19,6 +19,13 @@ use Drupal\Core\Url;
  */
 class HatController extends ControllerBase {
 
+  protected $config;
+
+  public function __construct()
+  {
+    $this->config = \Drupal::config('name_game_client.settings');
+  }
+
   public function leaveHat() {
     $tempstore = \Drupal::service('user.private_tempstore')->get('name_game_client');
     $tempstore->delete('name_game_hat_id');
@@ -38,12 +45,13 @@ class HatController extends ControllerBase {
 
     // Sadly, re-fetch the name because I suck.
     $client = \Drupal::httpClient();
-    $name = $client->get('http://35.226.37.213/namegame/api/names/' . $name_id);
+    $api_url = $this->config->get('name_game_client_api_server');
+    $name = $client->get($api_url . '/names/' . $name_id);
     if ($name->getStatusCode() == 200) {
       $n_response = json_decode($name->getBody());
 
       // Time to mark this name as completed!
-      $update = $client->put('http://35.226.37.213/namegame/api/names/' . $name_id, [
+      $update = $client->put($api_url . '/names/' . $name_id, [
         'json' => [
           'Name' => $n_response->{'Name'},
           'isGotten' => true,
@@ -81,7 +89,8 @@ class HatController extends ControllerBase {
 
       // First fetch all the ungotten names from the current hat
       $client = \Drupal::httpClient();
-      $request = $client->get('http://35.226.37.213/namegame/api/hats/' . $hatid . '/names?isGotten=false', ['headers' => array('Content-Type' => 'application/json', 'Accept' => 'application/json')]);
+      $api_url = $this->config->get('name_game_client_api_server');
+      $request = $client->get($api_url . '/hats/' . $hatid . '/names?isGotten=false', ['headers' => array('Content-Type' => 'application/json', 'Accept' => 'application/json')]);
       if ($request->getStatusCode() == 200) {
         $response = json_decode($request->getBody());
         if (empty($response)) {
@@ -155,7 +164,8 @@ class HatController extends ControllerBase {
     $renderer = \Drupal::service('renderer');
     $nameFormHTML = $renderer->render($nameForm);
     $client = \Drupal::httpClient();
-    $request = $client->get('http://35.226.37.213/namegame/api/hats/' . $hatid . '/names?isGotten=false', ['headers' => array('Content-Type' => 'application/json', 'Accept' => 'application/json')]);
+    $api_url = $this->config->get('name_game_client_api_server');
+    $request = $client->get($api_url . '/hats/' . $hatid . '/names?isGotten=false', ['headers' => array('Content-Type' => 'application/json', 'Accept' => 'application/json')]);
     $response = json_decode($request->getBody());
     $names_markup = "";
     if (sizeof($response > 0)) {

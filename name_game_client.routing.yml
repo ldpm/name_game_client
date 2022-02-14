@@ -71,3 +71,12 @@ name_game_client.name_form:
     _title: 'NameForm'
   requirements:
     _access: 'TRUE'
+
+name_game_client.settings:
+  path: '/admin/config/namegame/settings'
+  defaults:
+    _form: '\Drupal\name_game_client\Form\SettingsForm'
+    _title: 'Name Game Configiration'
+  requirements:
+    _permission: 'administer name game'
+

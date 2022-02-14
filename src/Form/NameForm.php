@@ -81,7 +81,8 @@ class NameForm extends FormBase {
     $today = new \DateTime();
     $todaystring = $today->format(DATE_ISO8601);
     $client = \Drupal::httpClient();
-    $request = $client->post("http://35.226.37.213/namegame/api/names", [
+    $api_url = $this->config->get('name_game_client_api_server');
+    $request = $client->post($api_url . "/names", [
       'json' => [
         'Name' => $form_state->getValue('name'),
         'isGotten' => false,

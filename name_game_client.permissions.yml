@@ -1,4 +1,8 @@
 play name game:
   title: 'Play Name Game'
   description: 'Allows people to access Name Game nodes'
+
+administer name game:
+  title: 'Administer Name Game'
+  description: 'Allows people to set the API server and potentially other options'
   restrict access: TRUE

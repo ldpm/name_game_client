@@ -9,6 +9,13 @@ use Drupal\Core\Controller\ControllerBase;
  */
 class WelcomeController extends ControllerBase {
 
+  protected $config;
+
+  public function __construct()
+  {
+    $this->config = \Drupal::config('name_game_client.settings');
+  }
+
   /**
    * Welcome.
    *
@@ -21,7 +28,8 @@ class WelcomeController extends ControllerBase {
     $stored_player = $tempstore->get('name_game_player_id');
 
     $client = \Drupal::httpClient();
-    $request = $client->get('http://35.226.37.213/namegame/api/players/' . $stored_player);
+    $api_url = $this->config->get('name_game_client_api_server');
+    $request = $client->get($api_url . '/players/' . $stored_player);
     if ($request->getStatusCode() == 200) {
       $player = json_decode($request->getBody(), true);
     }
